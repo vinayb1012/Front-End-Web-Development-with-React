@@ -24,8 +24,8 @@ const minLength = (len) => (val) => (val) && (val.length >= len);
 const maxLength = (len) => (val) => (val) && (val.length <= len);
 
 
-function renderDish(dish) {
-    if (dish != null)
+function RenderDish({dish}) {
+    if (dish != null) {
         return (
             <Card key={dish.id}>
                 <CardImg top src={dish.image} alt={dish.name}/>
@@ -34,8 +34,37 @@ function renderDish(dish) {
                     <CardText>{dish.description}</CardText>
                 </CardBody>
             </Card>
+        )
+    } else return <div/>;
+}
+
+function RenderComments({comments, addComment, dishId}) {
+    var options = {year: 'numeric', month: 'long', day: 'numeric'};
+    const cmnts = comments.map((comment) => {
+        var date = new Date(comment.date).toLocaleDateString('en-US', options);
+        return (
+            <>
+                <ListGroup key={comment.id}>
+                    <ListGroupItem className="border-0">{comment.comment}</ListGroupItem>
+
+                    <ListGroupItem className="border-0">
+                        --{comment.author}, {date}
+                    </ListGroupItem>
+                </ListGroup>
+            </>
         );
-    else return <div/>;
+    });
+    if (cmnts != null) {
+        if (cmnts.length !== 0) {
+            return (
+                <>
+                    <h4>Comments</h4>
+                    {cmnts}
+                    <CommentForm dishId={dishId} addComment={addComment}/>
+                </>
+            );
+        }
+    }
 }
 
 class CommentForm extends Component {
@@ -53,8 +82,8 @@ class CommentForm extends Component {
     }
 
     handleSubmit = (val) => {
-        alert("Submitting comment - " + JSON.stringify(val));
         this.toggleModal();
+        this.props.addComment(this.props.dishId, val.rating, val.author, val.comment);
     }
 
     render = () => {
@@ -117,38 +146,9 @@ class CommentForm extends Component {
     };
 }
 
-function renderComments(comments) {
-    var options = {year: 'numeric', month: 'long', day: 'numeric'};
-    const cmnts = comments.map((comment) => {
-        var date = new Date(comment.date).toLocaleDateString('en-US', options);
-        return (
-            <>
-                <ListGroup key={comment.id}>
-                    <ListGroupItem className="border-0">{comment.comment}</ListGroupItem>
-
-                    <ListGroupItem className="border-0">
-                        --{comment.author}, {date}
-                    </ListGroupItem>
-                </ListGroup>
-            </>
-        );
-    });
-    if (cmnts != null) {
-        if (cmnts.length !== 0) {
-            return (
-                <div>
-                    <h4>Comments</h4>
-                    {cmnts}
-                    <CommentForm/>
-                </div>
-            );
-        }
-    }
-}
 
 const DishDetail = (props) => {
     const dish = props.dish;
-    const comments = props.comments;
 
     return (
         <div className="container">
@@ -160,10 +160,15 @@ const DishDetail = (props) => {
             </div>
 
             <div className="row">
-                <div className="col-12 col-md-5 m-1">{renderDish(dish)}</div>
+                <div className="col-12 col-md-5 m-1">
+                    <RenderDish dish={dish}/>
+                </div>
 
                 <div className="col-12 col-md-5 m-1">
-                    {renderComments(comments)}
+                    <RenderComments comments={props.comments}
+                                    addComment={props.addComment}
+                                    dishId={props.dish.id}
+                    />
                 </div>
             </div>
         </div>
