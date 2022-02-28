@@ -1,20 +1,20 @@
 import {Component} from "react";
 import {
+    Button,
     Collapse,
+    Form,
+    FormGroup,
+    Input,
     Jumbotron,
+    Label,
+    Modal,
+    ModalBody,
+    ModalHeader,
     Nav,
     Navbar,
     NavbarBrand,
     NavbarToggler,
-    NavItem,
-    Button,
-    Modal,
-    ModalHeader,
-    ModalBody,
-    Form,
-    FormGroup,
-    Input,
-    Label
+    NavItem
 } from "reactstrap";
 import {NavLink} from "react-router-dom";
 
