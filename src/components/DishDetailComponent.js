@@ -20,23 +20,31 @@ import {
 import {Link} from "react-router-dom";
 import {Loading} from "./LoadingComponent";
 import {Control, Errors, LocalForm} from "react-redux-form";
+import {baseUrl} from "../shared/baseUrl";
 
 const minLength = (len) => (val) => (val) && (val.length >= len);
 const maxLength = (len) => (val) => (val) && (val.length <= len);
 
 
 function RenderDish({dish}) {
+    console.log(dish);
+    console.log(dish==null);
+
     if (dish != null) {
         return (
             <Card key={dish.id}>
-                <CardImg top src={dish.image} alt={dish.name}/>
+                <CardImg top src={baseUrl + dish.image} alt={dish.name}/>
                 <CardBody>
                     <CardTitle>{dish.name}</CardTitle>
                     <CardText>{dish.description}</CardText>
                 </CardBody>
             </Card>
         )
-    } else return <div/>;
+    }
+    else {
+        alert("Else reached");
+        return <></>;
+    }
 }
 
 function RenderComments({comments, addComment, dishId}) {
@@ -66,6 +74,12 @@ function RenderComments({comments, addComment, dishId}) {
             );
         }
     }
+    else
+        return (
+            <>
+            <p>Nothing</p>
+            </>
+        );
 }
 
 class CommentForm extends Component {
