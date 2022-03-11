@@ -28,7 +28,7 @@ const maxLength = (len) => (val) => (val) && (val.length <= len);
 
 function RenderDish({dish}) {
     console.log(dish);
-    console.log(dish==null);
+    console.log(dish == null);
 
     if (dish != null) {
         return (
@@ -40,8 +40,7 @@ function RenderDish({dish}) {
                 </CardBody>
             </Card>
         )
-    }
-    else {
+    } else {
         alert("Else reached");
         return <></>;
     }
@@ -63,23 +62,16 @@ function RenderComments({comments, addComment, dishId}) {
             </>
         );
     });
-    if (cmnts != null) {
-        if (cmnts.length !== 0) {
-            return (
-                <>
-                    <h4>Comments</h4>
-                    {cmnts}
-                    <CommentForm dishId={dishId} addComment={addComment}/>
-                </>
-            );
-        }
-    }
-    else
+    if (cmnts != null && cmnts.length !== 0) {
         return (
             <>
-            <p>Nothing</p>
+                <h4>Comments</h4>
+                {cmnts}
+                <CommentForm dishId={dishId} addComment={addComment}/>
             </>
         );
+    } else
+        return null;
 }
 
 class CommentForm extends Component {
@@ -204,7 +196,8 @@ const DishDetail = (props) => {
                 </div>
             </div>
         );
-    }
+    } else
+        return null;
 };
 
 
