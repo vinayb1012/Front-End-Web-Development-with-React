@@ -21,27 +21,28 @@ import {Link} from "react-router-dom";
 import {Loading} from "./LoadingComponent";
 import {Control, Errors, LocalForm} from "react-redux-form";
 import {baseUrl} from "../shared/baseUrl";
+import {FadeTransform, Fade, Stagger} from "react-animation-components";
 
 const minLength = (len) => (val) => (val) && (val.length >= len);
 const maxLength = (len) => (val) => (val) && (val.length <= len);
 
 
 function RenderDish({dish}) {
-    console.log(dish);
-    console.log(dish == null);
-
     if (dish != null) {
         return (
-            <Card key={dish.id}>
-                <CardImg top src={baseUrl + dish.image} alt={dish.name}/>
-                <CardBody>
-                    <CardTitle>{dish.name}</CardTitle>
-                    <CardText>{dish.description}</CardText>
-                </CardBody>
-            </Card>
+            <div className="col-12 col-md-5 m-1">
+                <FadeTransform in transformProps={{exitTransform: 'scale(0.5) translateY(-50%)'}}>
+                    <Card key={dish.id}>
+                        <CardImg top src={baseUrl + dish.image} alt={dish.name}/>
+                        <CardBody>
+                            <CardTitle>{dish.name}</CardTitle>
+                            <CardText>{dish.description}</CardText>
+                        </CardBody>
+                    </Card>
+                </FadeTransform>
+            </div>
         )
     } else {
-        alert("Else reached");
         return <></>;
     }
 }
@@ -52,22 +53,26 @@ function RenderComments({comments, postComment, dishId}) {
         var date = new Date(comment.date).toLocaleDateString('en-US', options);
         return (
             <>
-                <ListGroup key={comment.id}>
-                    <ListGroupItem className="border-0">{comment.comment}</ListGroupItem>
+                <Fade in>
+                    <ListGroup key={comment.id}>
+                        <ListGroupItem className="border-0">{comment.comment}</ListGroupItem>
 
-                    <ListGroupItem className="border-0">
-                        --{comment.author}, {date}
-                    </ListGroupItem>
-                </ListGroup>
+                        <ListGroupItem className="border-0">
+                            --{comment.author}, {date}
+                        </ListGroupItem>
+                    </ListGroup>
+                </Fade>
             </>
         );
     });
     if (cmnts != null && cmnts.length !== 0) {
         return (
             <>
-                <h4>Comments</h4>
-                {cmnts}
-                <CommentForm dishId={dishId} postComment={postComment}/>
+                <Stagger in>
+                    <h4>Comments</h4>
+                    {cmnts}
+                    <CommentForm dishId={dishId} postComment={postComment}/>
+                </Stagger>
             </>
         );
     } else
@@ -184,9 +189,7 @@ const DishDetail = (props) => {
                 </div>
 
                 <div className="row">
-                    <div className="col-12 col-md-5 m-1">
-                        <RenderDish dish={props.dish}/>
-                    </div>
+                    <RenderDish dish={props.dish}/>
 
                     <div className="col-12 col-md-5 m-1">
                         <RenderComments comments={props.comments}
