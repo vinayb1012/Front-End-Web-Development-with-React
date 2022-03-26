@@ -53,30 +53,27 @@ function RenderComments({comments, postComment, dishId}) {
         var date = new Date(comment.date).toLocaleDateString('en-US', options);
         return (
             <>
-                <Fade in>
-                    <ListGroup key={comment.id}>
-                        <ListGroupItem className="border-0">{comment.comment}</ListGroupItem>
+                <ListGroup key={comment.id}>
+                    <ListGroupItem className="border-0">{comment.comment}</ListGroupItem>
 
-                        <ListGroupItem className="border-0">
-                            --{comment.author}, {date}
-                        </ListGroupItem>
-                    </ListGroup>
-                </Fade>
+                    <ListGroupItem className="border-0">
+                        --{comment.author}, {date}
+                    </ListGroupItem>
+                </ListGroup>
             </>
         );
     });
-    if (cmnts != null && cmnts.length !== 0) {
-        return (
-            <>
-                <Stagger in>
-                    <h4>Comments</h4>
+    return (
+        <>
+            <Stagger in>
+                <h4>Comments</h4>
+                <Fade in>
                     {cmnts}
-                    <CommentForm dishId={dishId} postComment={postComment}/>
-                </Stagger>
-            </>
-        );
-    } else
-        return null;
+                </Fade>
+                <CommentForm dishId={dishId} postComment={postComment}/>
+            </Stagger>
+        </>
+    );
 }
 
 class CommentForm extends Component {
